@@ -7,7 +7,6 @@ conexion = mysql.connector.connect(
     database='almacen'
 )
 
-
 cursor = conexion.cursor()
 
 cursor.execute('''
