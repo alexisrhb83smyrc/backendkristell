@@ -6,10 +6,12 @@ conexion = mysql.connector.connect(
     password='',
     database='almacen'
 )
+
+
 cursor = conexion.cursor()
 
 cursor.execute('''
-    CREATE TABLE productos (
+    CREATE TABLE IF NOT EXISTS productos (
         id INT AUTO_INCREMENT PRIMARY KEY,
         nombre VARCHAR(255),
         precio FLOAT
@@ -17,7 +19,7 @@ cursor.execute('''
 ''')
 
 cursor.execute('''
-    CREATE TABLE entrada (
+    CREATE TABLE IF NOT EXISTS entrada (
         id INT AUTO_INCREMENT PRIMARY KEY,
         producto_id INT,
         cantidad INT,
@@ -27,7 +29,7 @@ cursor.execute('''
 ''')
 
 cursor.execute('''
-    CREATE TABLE salida (
+    CREATE TABLE IF NOT EXISTS salida (
         id INT AUTO_INCREMENT PRIMARY KEY,
         producto_id INT,
         cantidad INT,
@@ -37,7 +39,7 @@ cursor.execute('''
 ''')
 
 cursor.execute('''
-    CREATE TABLE inventario (
+    CREATE TABLE IF NOT EXISTS inventario (
         id INT AUTO_INCREMENT PRIMARY KEY,
         producto_id INT,
         cantidad INT,
@@ -47,7 +49,7 @@ cursor.execute('''
 
 #Sp
 cursor.execute('''
-CREATE PROCEDURE sp_insertar_entrada(
+CREATE PROCEDURE IF NOT EXISTS sp_insertar_entrada(
     IN p_producto_id INT,
     IN p_cantidad INT,
     IN p_fecha DATE
@@ -58,7 +60,7 @@ BEGIN
 END
 ''')
 cursor.execute('''
-CREATE PROCEDURE sp_actualizar_entrada(
+CREATE PROCEDURE IF NOT EXISTS sp_actualizar_entrada(
     IN p_entrada_id INT,
     IN p_producto_id INT,
     IN p_cantidad INT,
@@ -73,7 +75,7 @@ END
 
 # Crear vista inventario_productos
 cursor.execute('''
-CREATE VIEW vista_inventario_productos AS
+CREATE VIEW IF NOT EXISTS vista_inventario_productos AS
 SELECT p.id AS producto_id, p.nombre AS producto_nombre, p.precio AS producto_precio, i.cantidad AS inventario_cantidad
 FROM productos p
 LEFT JOIN inventario i ON p.id = i.producto_id;
